@@ -21,7 +21,7 @@ router.get('/autor/:autor', async function (req, res, next){
 router.post('/', async function (req, res, next){
     try 
     {
-        const nuevo = await getRecetaByTitulo(req.body.titulo)
+        let nuevo = await getRecetaByTitulo(req.body.titulo)
         if (nuevo)
         {
             throw new Error('Ya existe un restaurantre con este titulo');
@@ -37,5 +37,9 @@ router.post('/', async function (req, res, next){
     }
 })
 
+router.put('/:tituloRes', async function (req, res, next){
+    const product = await editarReceta(req.params, req.body);
+    res.send(product);
+})
 
 module.exports = router;

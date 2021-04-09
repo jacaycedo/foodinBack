@@ -32,14 +32,15 @@ async function getRecetaByTitulo(id)
 
 async function insertReceta(receta)
 {
-    await db.collection(NOMBRE_COLLECCION)
+    await db().collection(NOMBRE_COLLECCION)
     .insertOne(receta);
     return;
 }
 
 async function editarReceta(viejo, nuevo)
 {
-    await db.collection(NOMBRE_COLLECCION).replaceOne(viejo, nuevo);
+   const act = await db().collection(NOMBRE_COLLECCION).replaceOne(viejo, nuevo);
+   return act;
 }
 
 module.exports = [getRecetas,getRecetaByTitulo,insertReceta,editarReceta,getRecetaByAutor]

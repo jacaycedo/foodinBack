@@ -16,7 +16,7 @@ router.get('/:nombreRestaurante', async function (req, res, next){
 router.post('/', async function (req, res, next){
     try 
     {
-        const nuevo = await getRestauranteByNombre(req.body.nombre)
+        let nuevo = await getRestauranteByNombre(req.body.nombre)
         if (nuevo)
         {
             throw new Error('Ya existe un restaurantre con este nombre');

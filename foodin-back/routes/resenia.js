@@ -21,9 +21,9 @@ router.get('/autor/:autor', async function (req, res, next){
 router.post('/', async function (req, res, next){
     try 
     {
-        await editarResenia(req.body);
+        let nuevo = await getRecetaByTitulo(req.body.titulo);
         console.log('nombreReceta', req.body.nombre);
-        const nuevo = await getRecetaByNombre(req.body.nombre);
+        nuevo = await getRecetaByNombre(req.body.nombre);
         res.send(nuevo);
     } 
     catch ({error}) 

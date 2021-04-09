@@ -33,7 +33,7 @@ async function getRecetaByRestaurante(id)
 
 async function insertResenia(resenia)
 {
-    await db.collection(NOMBRE_COLLECCION)
+    await db().collection(NOMBRE_COLLECCION)
     .insertOne(resenia);
     return;
 }

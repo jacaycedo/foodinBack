@@ -23,14 +23,15 @@ async function getRestauranteByNombre(id)
 
 async function insertRestaurante(restaurante)
 {
-    await db.collection(NOMBRE_COLLECCION)
+    await db().collection(NOMBRE_COLLECCION)
     .insertOne(restaurante);
     return;
 }
 
 async function editarRestaurante(viejo, nuevo)
 {
-    await db.collection(NOMBRE_COLLECCION).replaceOne(viejo, nuevo);
+    const act = await db().collection(NOMBRE_COLLECCION).replaceOne(viejo, nuevo);
+    return act;
 }
 
 module.exports =[getRestaurantes, getRestauranteByNombre,insertRestaurante, editarRestaurante]
