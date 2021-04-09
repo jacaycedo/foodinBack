@@ -21,18 +21,20 @@ router.get('/autor/:autor', async function (req, res, next){
 router.post('/', async function (req, res, next){
     try 
     {
-        let nuevo = await getRecetaByTitulo(req.body.titulo)
+        console.log("entre")
+        let nuevo = await getRecetaByTitulo(req.body.id)
         if (nuevo)
         {
-            throw new Error('Ya existe un restaurantre con este titulo');
+            throw new Error('Ya existe una receta con este nombre');
         }
         await insertReceta(req.body);
-        console.log('nombreReceta', req.body.titulo);
-        nuevo = await getRecetaByNombre(req.body.titulo);
+        console.log('nombreReceta', req.body.id);
+        nuevo = await getRecetaByNombre(req.body.id);
         res.send(nuevo);
     } 
-    catch ({error}) 
-    {
+    catch (error) 
+    {   
+        console.log(error)
         res.status(500).send('Internal Server Error');
     }
 })

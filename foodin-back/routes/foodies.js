@@ -7,12 +7,16 @@ router.get('/', async function (req, res, next){
     res.send(products);
 })
 
-router.get('/:foodieUser', async function (req, res, next){
-    const products = await getFoodieByUsername(req.param.foodieUser);
+router.get('/:username', async function (req, res, next){
+    const products = await getFoodieByUsername(req.param.username);
     res.send(products);
 })
 
-
+router.put('/:username', async function (req, res, next){
+    console.log("Not in ")
+    const product = await editarFoodie(req.params, req.body);
+    res.send(product);
+})
 
 router.post('/', async function (req, res, next){
     try 
@@ -20,11 +24,11 @@ router.post('/', async function (req, res, next){
         let nuevo = await getFoodieByUsername(req.body.username)
         if (nuevo)
         {
-            throw new Error('Ya existe un restaurantre con este titulo');
+            throw new Error('Ya existe un foodie con este titulo');
         }
         await insertFoodie(req.body);
-        console.log('nombreReceta', req.body.titulo);
-        nuevo = await getFoodieByUsername(req.body.titulo);
+        console.log('nombrefoodie', req.body.nombre);
+        nuevo = await getFoodieByUsername(req.body.username);
         res.send(nuevo);
     } 
     catch ({error}) 
@@ -33,9 +37,6 @@ router.post('/', async function (req, res, next){
     }
 })
 
-router.put('/:userFoodie', async function (req, res, next){
-    const product = await editarFoodie(req.params, req.body);
-    res.send(product);
-})
+
 
 module.exports = router;

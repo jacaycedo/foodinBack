@@ -23,6 +23,7 @@ async function getFoodieByUsername(id)
 
 async function insertFoodie(foodie)
 {
+    console.log('entre')
     await db().collection(NOMBRE_COLLECCION)
     .insertOne(foodie);
     return;
