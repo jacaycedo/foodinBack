@@ -12,9 +12,8 @@ router.get('/:username', async function (req, res, next){
     res.send(products);
 })
 
-router.put('/:username', async function (req, res, next){
-    console.log("Not in ")
-    const product = await editarFoodie(req.params, req.body);
+router.put('/', async function (req, res, next){
+    const product = await editarFoodie(req.body);
     res.send(product);
 })
 
@@ -22,6 +21,7 @@ router.post('/', async function (req, res, next){
     try 
     {
         let nuevo = await getFoodieByUsername(req.body.username)
+        console.log(nuevo)
         if (nuevo)
         {
             throw new Error('Ya existe un foodie con este titulo');

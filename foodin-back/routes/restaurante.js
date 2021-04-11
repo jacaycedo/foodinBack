@@ -1,17 +1,41 @@
 var express = require('express')
 var router = express.Router('router')
-var [getRestaurantes, getRestauranteByNombre,insertRestaurante, editarRestaurante] = require('../controllers/restaurante')
+var [getRestaurantes, getRestauranteByNombre,insertRestaurante, editarRestaurante,agregarResenia,listarResenias,agregarReceta,listarRecetas] = require('../controllers/restaurante')
 
 router.get('/', async function (req, res, next){
+    
     const products = await getRestaurantes();
     res.send(products);
 })
 
-router.get('/:nombreRestaurante', async function (req, res, next){
+router.get('/resenia', async function (req, res, next){
+    
+    const resultado = await listarResenias(req.body.nombre)
+    console.log(resultado)
+    res.send(resultado)
+})
+
+router.get('/recetas', async function (req, res, next){
+    
+    const resultado = await listarRecetas(req.body.nombre)
+    console.log(resultado)
+    res.send(resultado)
+})
+
+router.get('/restaurante/:nombreRestaurante', async function (req, res, next){
     const products = await getRestauranteByNombre(req.param.nombreRestaurante);
     res.send(products);
 })
 
+router.post('/resenia', async function (req,res,next){
+    const resultado = await agregarResenia(req.body)
+    res.send(resultado)
+})
+
+router.post('/recetas',async function(req,res,next){
+    const resultado = await agregarReceta(req.body)
+    res.send(resultado)
+})
 
 router.post('/', async function (req, res, next){
     try 
@@ -32,8 +56,8 @@ router.post('/', async function (req, res, next){
     }
 })
 
-router.put('/:nombreRestaurante', async function (req, res, next){
-    const product = await editarRestaurante(req.params, req.body);
+router.put('/', async function (req, res, next){
+    const product = await editarRestaurante(req.body);
     res.send(product);
 })
 

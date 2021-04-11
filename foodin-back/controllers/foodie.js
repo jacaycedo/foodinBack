@@ -29,9 +29,9 @@ async function insertFoodie(foodie)
     return;
 }
 
-async function editarFoodie(viejo, nuevo)
+async function editarFoodie(nuevo)
 {
-    const act = await db().collection(NOMBRE_COLLECCION).replaceOne(viejo, nuevo);
+    const act = await db().collection(NOMBRE_COLLECCION).updateOne(nuevo);
     return act;
 }
 
