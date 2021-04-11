@@ -1,13 +1,13 @@
 var express = require('express')
 var router = express.Router('router')
-var [getFoodies, getFoodieByUsername,insertFoodie, editarFoodie] = require('../controllers/foodie')
+var [getFoodies, getFoodieByUsername,insertFoodie, editarFoodie,agregarReceta,listarRecetas] = require('../controllers/foodie')
 
 router.get('/', async function (req, res, next){
     const products = await getFoodies();
     res.send(products);
 })
 
-router.get('/:username', async function (req, res, next){
+router.get('/user/:username', async function (req, res, next){
     const products = await getFoodieByUsername(req.param.username);
     res.send(products);
 })
@@ -15,6 +15,16 @@ router.get('/:username', async function (req, res, next){
 router.put('/', async function (req, res, next){
     const product = await editarFoodie(req.body);
     res.send(product);
+})
+
+router.get('/recetas',async function (req,res,next){
+    const resultado = await listarRecetas(req.body)
+    res.send(resultado)
+})
+
+router.post('/recetas', async function (req,res,next){
+    const resultado = await agregarReceta(req.body)
+    res.send(resultado)
 })
 
 router.post('/', async function (req, res, next){
