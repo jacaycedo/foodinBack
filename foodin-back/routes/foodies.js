@@ -1,6 +1,10 @@
 var express = require('express')
 var router = express.Router('router')
-var [getFoodies, getFoodieByUsername,insertFoodie, editarFoodie,agregarReceta,listarRecetas] = require('../controllers/foodie')
+var [getFoodies, getFoodieByUsername,insertFoodie, editarFoodie,agregarReceta,listarRecetas,insertarRecetaFavorita,
+    insertarRestauranteFavorito,insertarFollowRestaurante,insertarFollowFoodie,
+    insertarCategoria,listarRestaurantesFollow,listarFoodiesFollow,
+    listarRestaurantesFavoritos,listarRecetasFavoritas
+] = require('../controllers/foodie')
 
 router.get('/', async function (req, res, next){
     const products = await getFoodies();
@@ -21,9 +25,52 @@ router.get('/recetas',async function (req,res,next){
     const resultado = await listarRecetas(req.body)
     res.send(resultado)
 })
+router.post('/restaurantesFavoritos', async function (req,res,next){
+    const resultado = await insertarRestauranteFavorito(req.body)
+    res.send(resultado)
+})
+router.get('/restaurantesFavoritos', async function (req,res,next){
+    const resultado = await listarRestaurantesFavoritos(req.body)
+    res.send(resultado)
+})
+
+router.get('/recetasFavoritas', async function (req,res,next){
+    const resultado = await listarRecetasFavoritas(req.body)
+    res.send(resultado)
+})
+router.post('/recetasFavoritas', async function (req,res,next){
+    const resultado = await insertarRecetaFavorita(req.body)
+    res.send(resultado)
+})
 
 router.post('/recetas', async function (req,res,next){
     const resultado = await agregarReceta(req.body)
+    res.send(resultado)
+})
+
+
+router.post('/followRestaurante', async function (req,res,next){
+    const resultado = await insertarFollowRestaurante(req.body)
+    res.send(resultado)
+})
+
+router.get('/followRestaurante', async function (req,res,next){
+    const resultado = await listarRestaurantesFollow(req.body)
+    res.send(resultado)
+})
+
+router.post('/followFoodie', async function (req,res,next){
+    const resultado = await insertarFollowFoodie(req.body)
+    res.send(resultado)
+})
+
+router.get('/followFoodie', async function (req,res,next){
+    const resultado = await listarFoodiesFollow(req.body)
+    res.send(resultado)
+})
+
+router.post('/categorias', async function (req,res,next){
+    const resultado = await insertarCategoria(req.body)
     res.send(resultado)
 })
 
