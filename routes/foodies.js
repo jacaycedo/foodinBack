@@ -11,8 +11,8 @@ router.get('/', async function (req, res, next){
     res.send(products);
 })
 
-router.get('/user', async function (req, res, next){
-    const products = await getFoodieByUsername(req.body.username);
+router.get('/user/:username', async function (req, res, next){
+    const products = await getFoodieByUsername(req.params.username);
     res.send(products);
 })
 
@@ -21,21 +21,21 @@ router.put('/', async function (req, res, next){
     res.send(product);
 })
 
-router.get('/recetas',async function (req,res,next){
-    const resultado = await listarRecetas(req.body)
+router.get('/recetas/:username',async function (req,res,next){
+    const resultado = await listarRecetas(req.params)
     res.send(resultado)
 })
 router.post('/restaurantesFavoritos', async function (req,res,next){
     const resultado = await insertarRestauranteFavorito(req.body)
     res.send(resultado)
 })
-router.get('/restaurantesFavoritos', async function (req,res,next){
-    const resultado = await listarRestaurantesFavoritos(req.body)
+router.get('/restaurantesFavoritos/:username', async function (req,res,next){
+    const resultado = await listarRestaurantesFavoritos(req.params)
     res.send(resultado)
 })
 
-router.get('/recetasFavoritas', async function (req,res,next){
-    const resultado = await listarRecetasFavoritas(req.body)
+router.get('/recetasFavoritas/:username', async function (req,res,next){
+    const resultado = await listarRecetasFavoritas(req.params)
     res.send(resultado)
 })
 router.post('/recetasFavoritas', async function (req,res,next){
@@ -54,8 +54,8 @@ router.post('/followRestaurante', async function (req,res,next){
     res.send(resultado)
 })
 
-router.get('/followRestaurante', async function (req,res,next){
-    const resultado = await listarRestaurantesFollow(req.body)
+router.get('/followRestaurante/:username', async function (req,res,next){
+    const resultado = await listarRestaurantesFollow(req.params)
     res.send(resultado)
 })
 
@@ -64,8 +64,8 @@ router.post('/followFoodie', async function (req,res,next){
     res.send(resultado)
 })
 
-router.get('/followFoodie', async function (req,res,next){
-    const resultado = await listarFoodiesFollow(req.body)
+router.get('/followFoodie/:username', async function (req,res,next){
+    const resultado = await listarFoodiesFollow(req.param)
     res.send(resultado)
 })
 
