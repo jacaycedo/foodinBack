@@ -22,7 +22,7 @@ router.post('/', async function (req, res, next){
     try 
     {
         console.log("entre")
-        let nuevo = await getRecetaByTitulo(req.body.id)
+        let nuevo = await getRecetaByTitulo(req.body.nombre)
         if (nuevo)
         {
             throw new Error('Ya existe una receta con este nombre');
