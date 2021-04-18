@@ -22,6 +22,12 @@ async function getRecetaByAutor(nombre)
     return recetas;
 }
 
+async function deleteRestauranteById(id)
+{
+    await db().collection(NOMBRE_COLLECCION)
+    .deleteOne({_id:ObjectId(id)})
+}
+
 async function getRecetaByTitulo(id)
 {
     const receta = await db()
