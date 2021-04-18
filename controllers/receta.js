@@ -29,7 +29,7 @@ async function deleteRecetaById(id)
 }
 
 async function getRecetaByTitulo(tit)
-{
+{   
     const receta = await db()
     .collection(NOMBRE_COLLECCION)
     .findOne({nombre:tit})

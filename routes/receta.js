@@ -1,39 +1,43 @@
 var express = require('express')
 var router = express.Router('router')
-var [ getRecetas,getRecetaByTitulo,insertReceta, editarReceta, getRecetaByAutor, deleteRecetaById,getRecetaById] = require('../controllers/receta')
+var [getRecetas,getRecetaByTitulo,getRecetaById,insertReceta,editarReceta,getRecetaByAutor,deleteRecetaById] = require('../controllers/receta')
 
 router.get('/', async function (req, res, next){
+    console.log("Todos")
+
     const products = await getRecetas();
     res.send(products);
 })
 
-router.get('/nombre/:nombreReceta', async function (req, res, next){
-    console.log(req.params.nombreReceta)
-    const products = await getRecetaByTitulo(req.params.nombreReceta);
+router.get('/nombre', async function (req, res, next){
+    const products = await getRecetaByTitulo(req.body.nombre);
     res.send(products);
 })
-router.get('/id/:id', async function (req, res, next){
-    console.log(req.params.nombreReceta)
-    const products = await getRecetaById(req.params.id);
+router.get('/id', async function (req, res, next){
+    console.log("ids")
+
+    const products = await getRecetaById(req.body.id);
     res.send(products);
 })
 
-router.get('/autor/:autor', async function (req, res, next){
-    const products = await getRecetaByAutor(req.params.autor);
+router.get('/autor', async function (req, res, next){
+    console.log("autor")
+    const products = await getRecetaByAutor(req.body.autor);
     res.send(products);
 })
 
-router.delete('/:id', async function (req, res, next){
-    let borrar = await getRecetaById((req.params.id))
-    if(!borrar){res.status(404).send("No existe una recerta con ese id"); return;}
+router.delete('/id', async function (req, res, next){
+    let borrar = await getRecetaById((req.body.id))
+    if(!borrar){res.status(404).send("No existe una receta con ese id"); return;}
     else{
         const del = await deleteRecetaById(req.params.id)
-        res.send("Eliminada lareceta con id ", borrar.id)
+        res.send("Eliminada la receta con id ", borrar.id)
     }
 })
 
 
 router.post('/', async function (req, res, next){
+    console.log('entre a agregar receta')
     try 
     {
         let nuevo = await getRecetaByTitulo(req.body.nombre)
@@ -54,8 +58,8 @@ router.post('/', async function (req, res, next){
     }
 })
 
-router.put('/:idreceta', async function (req, res, next){
-    const product = await editarReceta(req.params, req.body);
+router.put('/', async function (req, res, next){
+    const product = await editarReceta(req.id, req.body);
     res.send(product);
 })
 
