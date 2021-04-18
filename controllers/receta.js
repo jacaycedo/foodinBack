@@ -45,6 +45,7 @@ async function getRecetaById(id)
 
 async function insertReceta(receta)
 {
+    console.log(receta)
     await db().collection(NOMBRE_COLLECCION)
     .insertOne(receta);
     return;

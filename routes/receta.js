@@ -36,15 +36,14 @@ router.delete('/:id', async function (req, res, next){
 router.post('/', async function (req, res, next){
     try 
     {
-        console.log("entre")
         let nuevo = await getRecetaByTitulo(req.body.nombre)
         if (nuevo)
         {
             throw new Error('Ya existe una receta con este nombre');
-        }
+        } 
         await insertReceta(req.body);
-        console.log('nombreReceta', req.body.id);
-        nuevo = await getRecetaByTitulo(req.body.id);
+        console.log('nombreReceta', req.body.nombre);
+        nuevo = await getRecetaByTitulo(req.body.nombre);
         console.log(nuevo)
         res.send(nuevo);
     } 
