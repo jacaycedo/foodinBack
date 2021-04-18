@@ -1,5 +1,5 @@
 var express = require('express')
-var router = express.Router('router')
+var router = express.Router()
 var [getRecetas,getRecetaByTitulo,getRecetaById,insertReceta,editarReceta,getRecetaByAutor,deleteRecetaById] = require('../controllers/receta')
 
 router.get('/', async function (req, res, next){
@@ -9,20 +9,19 @@ router.get('/', async function (req, res, next){
     res.send(products);
 })
 
-router.get('/nombre', async function (req, res, next){
-    const products = await getRecetaByTitulo(req.body.nombre);
+router.get('/nombre/:nombreReceta', async function (req, res, next){
+    const products = await getRecetaByTitulo(req.params.nombreReceta);
     res.send(products);
 })
-router.get('/id', async function (req, res, next){
+router.get('/id/:id', async function (req, res, next){
     console.log("ids")
 
-    const products = await getRecetaById(req.body.id);
+    const products = await getRecetaById(req.params.id);
     res.send(products);
 })
 
-router.get('/autor', async function (req, res, next){
-    console.log("autor")
-    const products = await getRecetaByAutor(req.body.autor);
+router.get('/autor/:autor', async function (req, res, next){
+    const products = await getRecetaByAutor(req.params.autor);
     res.send(products);
 })
 
@@ -58,8 +57,8 @@ router.post('/', async function (req, res, next){
     }
 })
 
-router.put('/', async function (req, res, next){
-    const product = await editarReceta(req.id, req.body);
+router.put('/:id', async function (req, res, next){
+    const product = await editarReceta(req.params.id, req.body);
     res.send(product);
 })
 
