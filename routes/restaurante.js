@@ -8,16 +8,16 @@ router.get('/', async function (req, res, next){
     res.send(products);
 })
 
-router.get('/resenia', async function (req, res, next){
+router.get('/resenia/:nombreRestaurante', async function (req, res, next){
     
-    const resultado = await listarResenias(req.body.nombre)
+    const resultado = await listarResenias(req.params.nombreRestaurante)
     console.log(resultado)
     res.send(resultado)
 })
 
-router.get('/recetas', async function (req, res, next){
+router.get('/recetas/:nombreRestaurante', async function (req, res, next){
     
-    const resultado = await listarRecetas(req.body.nombre)
+    const resultado = await listarRecetas(req.params.nombreRestaurante)
     console.log(resultado)
     res.send(resultado)
 })
