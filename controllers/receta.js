@@ -24,11 +24,10 @@ async function getRecetaByAutor(nombre)
 
 async function getRecetaByTitulo(id)
 {
-    let x = new ObjectId(id);
 
     const receta = await db()
     .collection(NOMBRE_COLLECCION)
-    .findOne({_id:x});
+    .findOne({_id:ObjectId(id)});
 
     return receta;
 }
