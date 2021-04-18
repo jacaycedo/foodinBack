@@ -24,8 +24,12 @@ router.get('/autor/:autor', async function (req, res, next){
 })
 
 router.delete('/:id', async function (req, res, next){
-    const del = await deleteRecetaById()
-    res.send("Eliminado")
+    let borrar = await getRecetaById((req.params.id))
+    if(!borrar){res.status(404).send("No existe una recerta con ese id"); return;}
+    else{
+        const del = await deleteRecetaById(req.params.id)
+        res.send("Eliminada lareceta con id ", borrar.id)
+    }
 })
 
 

@@ -24,7 +24,7 @@ async function getRecetaByAutor(nombre)
 
 async function deleteRecetaById(id)
 {
-    await db().collection(NOMBRE_COLLECCION)
+    const x = await db().collection(NOMBRE_COLLECCION)
     .deleteOne({_id:ObjectId(id)})
 }
 
