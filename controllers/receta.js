@@ -28,8 +28,7 @@ async function getRecetaByTitulo(id)
     console.log(id);
     const receta = await db()
     .collection(NOMBRE_COLLECCION)
-    .findOne({"_id":id});
-[]
+    .findById(id)
     return receta;
 }
 
