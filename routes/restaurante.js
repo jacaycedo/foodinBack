@@ -23,7 +23,7 @@ router.get('/recetas', async function (req, res, next){
 })
 
 router.get('/restaurante/:nombreRestaurante', async function (req, res, next){
-    const products = await getRestauranteByNombre(req.param.nombreRestaurante);
+    const products = await getRestauranteByNombre(req.params.nombreRestaurante);
     res.send(products);
 })
 
