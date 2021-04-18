@@ -1,3 +1,4 @@
+const { ObjectId } = require('bson');
 const {db} = require('../db/mongoConexion')
 const NOMBRE_COLLECCION = 'recetas'
 
@@ -23,9 +24,11 @@ async function getRecetaByAutor(nombre)
 
 async function getRecetaByTitulo(id)
 {
+    let x = new ObjectId(id);
+    
     const receta = await db()
     .collection(NOMBRE_COLLECCION)
-    .findOne({_id:id});
+    .findOne({"_id":x});
 
     return receta;
 }
