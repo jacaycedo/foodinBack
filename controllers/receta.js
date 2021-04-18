@@ -22,7 +22,7 @@ async function getRecetaByAutor(nombre)
     return recetas;
 }
 
-async function deleteRestauranteById(id)
+async function deleteRecetaById(id)
 {
     await db().collection(NOMBRE_COLLECCION)
     .deleteOne({_id:ObjectId(id)})
@@ -49,4 +49,4 @@ async function editarReceta(viejo, nuevo)
    return act;
 }
 
-module.exports = [getRecetas,getRecetaByTitulo,insertReceta,editarReceta,getRecetaByAutor]
+module.exports = [getRecetas,getRecetaByTitulo,insertReceta,editarReceta,getRecetaByAutor,deleteRecetaById]

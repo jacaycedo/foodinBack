@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router('router')
-var [ getRecetas,getRecetaByTitulo,insertReceta, editarReceta, getRecetaByAutor] = require('../controllers/receta')
+var [ getRecetas,getRecetaByTitulo,insertReceta, editarReceta, getRecetaByAutor, deleteRecetaById] = require('../controllers/receta')
 
 router.get('/', async function (req, res, next){
     const products = await getRecetas();
@@ -16,6 +16,11 @@ router.get('/nombre/:nombreReceta', async function (req, res, next){
 router.get('/autor/:autor', async function (req, res, next){
     const products = await getRecetaByAutor(req.params.autor);
     res.send(products);
+})
+
+router.delete('/:id', async function (req, res, next){
+    const del = await deleteRecetaById()
+    res.send("Eliminado")
 })
 
 
