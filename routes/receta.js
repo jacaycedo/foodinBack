@@ -7,12 +7,12 @@ router.get('/', async function (req, res, next){
     res.send(products);
 })
 
-router.get('/:nombreReceta', async function (req, res, next){
+router.get('/nombre/:nombreReceta', async function (req, res, next){
     const products = await getRecetaByTitulo(req.param.nombreReceta);
     res.send(products);
 })
 
-router.get('/:autor', async function (req, res, next){
+router.get('/autor/:autor', async function (req, res, next){
     const products = await getRecetaByAutor(req.param.autor);
     res.send(products);
 })
