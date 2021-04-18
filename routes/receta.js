@@ -8,12 +8,13 @@ router.get('/', async function (req, res, next){
 })
 
 router.get('/nombre/:nombreReceta', async function (req, res, next){
-    const products = await getRecetaByTitulo(req.param.nombreReceta);
+    console.log(req.params.nombreReceta)
+    const products = await getRecetaByTitulo(req.params.nombreReceta);
     res.send(products);
 })
 
 router.get('/autor/:autor', async function (req, res, next){
-    const products = await getRecetaByAutor(req.param.autor);
+    const products = await getRecetaByAutor(req.params.autor);
     res.send(products);
 })
 
