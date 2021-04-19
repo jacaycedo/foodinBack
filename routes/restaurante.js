@@ -1,7 +1,9 @@
 var express = require('express')
 var router = express.Router('router')
-var [getRestaurantes, getRestauranteByNombre,insertRestaurante, editarRestaurante,agregarResenia,listarResenias,agregarReceta,listarRecetas] = require('../controllers/restaurante')
+var [getRestaurantes, getRestauranteByNombre,insertRestaurante, editarRestaurante,agregarResenia,listarResenias,agregarReceta,listarRecetas,insertarRestaurantePrueba] = require('../controllers/restaurante')
+const  multer = require('multer')
 
+let uploader  = multer({dest:'temp/'})
 router.get('/', async function (req, res, next){
     
     const products = await getRestaurantes();
@@ -37,24 +39,54 @@ router.post('/recetas',async function(req,res,next){
     res.send(resultado)
 })
 
-router.post('/', async function (req, res, next){
+router.post('/',multer({ dest: 'temp/', limits: { fieldSize: 8 * 1024 * 1024*1024 } }).single('imagen') ,async function (req, res, next){
+    console.log("Por si las")
     try 
     {
+        
         let nuevo = await getRestauranteByNombre(req.body.nombre)
         if (nuevo)
         {
             throw new Error('Ya existe un restaurantre con este nombre');
         }
-        await insertRestaurante(req.body);
+        console.log('El nombre del archivo')
+        await insertRestaurante(req.body,req);
         console.log('nombreRestaurante', req.body.nombre);
         nuevo = await getRestauranteByNombre(req.body.nombre);
         res.send(nuevo);
     } 
-    catch ({error}) 
+    catch (error) 
     {
+        console.log(error)
         res.status(500).send('Internal Server Error');
     }
 })
+
+
+router.post('/prueba',uploader.array('images',10),async function (req, res, next){
+    try 
+    {
+
+        console.log('Entre a cargar pruebas')
+        let nuevo = await getRestauranteByNombre(req.body.nombre)
+        if (nuevo)
+        {
+            throw new Error('Ya existe un restaurantre con este nombre');
+        }
+        console.log('El nombre del archivo')
+        await insertarRestaurantePrueba(req.body,req);
+        console.log('nombreRestaurante', req.body.nombre);
+        nuevo = await getRestauranteByNombre(req.body.nombre);
+        res.send(nuevo);
+    } 
+    catch (error) 
+    {
+        console.log(error)
+        res.status(500).send('Internal Server Error');
+    }
+})
+
+
 
 router.put('/', async function (req, res, next){
     const product = await editarRestaurante(req.body);

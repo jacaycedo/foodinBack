@@ -1,5 +1,52 @@
 const {db} = require('../db/mongoConexion')
 const NOMBRE_COLLECCION = 'restaurantes'
+const  aws = require('aws-sdk')
+const  fs = require('fs')
+const checkMulterParams = require('./check-multer-params');
+
+async function insertarRestaurantePrueba(restaurante, req){
+    console.log('Llegue hasta aca')
+    console.log(req.files)
+    aws.config.setPromisesDependency()
+    aws.config.update(
+        {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            region: process.env.REGION
+        }
+    )
+
+    let urls = new Array()
+    const s3 = new aws.S3()
+
+    for (const imageMeta of req.files){
+        let params = {
+            ACL:'public-read',
+            Bucket:process.env.S3_BUCKET,
+            Body:fs.createReadStream(imageMeta.path),
+            Key: `${imageMeta.filename}.${imageMeta.originalname.split('.')[1]}` 
+        }
+
+        let uploader = s3.upload(params)
+        let promise = uploader.promise()
+
+        await promise.then((data,err)=>{
+            if (err){
+                console.log('ERROR LOADING THE FILE')
+            }
+            if(data){
+                
+                fs.unlinkSync(imageMeta.path)
+                const urlLocation = data.Location
+                console.log(urlLocation)
+                urls.push(urlLocation)
+            }
+        })
+    }
+    console.log(urls)
+    let newRestaurante = {...restaurante,url:urls}
+        db().collection(NOMBRE_COLLECCION).insertOne(newRestaurante);
+}
 
 async function getRestaurantes()
 {
@@ -21,10 +68,42 @@ async function getRestauranteByNombre(id)
 }
 
 
-async function insertRestaurante(restaurante)
+async function insertRestaurante(restaurante,req)
 {
-    await db().collection(NOMBRE_COLLECCION)
-    .insertOne(restaurante);
+    aws.config.setPromisesDependency()
+    aws.config.update(
+        {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            region: process.env.REGION
+        }
+    )
+
+    const s3 = new aws.S3()
+
+    let params = {
+        ACL:'public-read',
+        Bucket:process.env.S3_BUCKET,
+        Body:fs.createReadStream(req.file.path),
+        Key: `${req.file.originalname}` 
+    }
+    
+    let uploader = s3.upload(params)
+    let promise = uploader.promise()
+    await promise.then((data,err)=>{
+        if (err){
+            console.log('ERROR LOADING THE FILE')
+        }
+        if(data){
+            console.log(data)
+            fs.unlinkSync(req.file.path)
+            const urlLocation = data.Location
+            let newRestaurante = {...restaurante,url:urlLocation}
+            db().collection(NOMBRE_COLLECCION)
+            .insertOne(newRestaurante);
+        }
+    })
+
     return;
 }
 
@@ -87,4 +166,4 @@ async function agregarReceta(body){
 }
 
 
-module.exports =[getRestaurantes, getRestauranteByNombre,insertRestaurante, editarRestaurante,agregarResenia,listarResenias,agregarReceta,listarRecetas]
+module.exports =[getRestaurantes, getRestauranteByNombre,insertRestaurante, editarRestaurante,agregarResenia,listarResenias,agregarReceta,listarRecetas,insertarRestaurantePrueba]
