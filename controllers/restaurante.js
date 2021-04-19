@@ -44,6 +44,8 @@ async function insertarRestaurantePrueba(restaurante, req){
         })
     }
     console.log(urls)
+    restaurante.estrellas = parseInt(restaurante.estrellas)
+    restaurante.costo = parseInt(restaurante.costo)
     let newRestaurante = {...restaurante,url:urls}
         db().collection(NOMBRE_COLLECCION).insertOne(newRestaurante);
 }
