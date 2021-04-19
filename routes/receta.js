@@ -1,6 +1,9 @@
 var express = require('express')
 var router = express.Router()
 var [getRecetas,getRecetaByTitulo,getRecetaById,insertReceta,editarReceta,getRecetaByAutor,deleteRecetaById,deleteRecetas] = require('../controllers/receta')
+const  multer = require('multer')
+let uploader  = multer({dest:'temp/'})
+
 
 router.get('/', async function (req, res, next){
     console.log("Todos")
@@ -40,7 +43,7 @@ router.delete('/efe', async function (req, res, next){
 })
 
 
-router.post('/', async function (req, res, next){
+router.post('/',uploader.array('images',10),async function (req, res, next){
     console.log('entre a agregar receta')
     try 
     {
@@ -49,7 +52,7 @@ router.post('/', async function (req, res, next){
         {
             throw new Error('Ya existe una receta con este nombre');
         } 
-        await insertReceta(req.body);
+        await insertReceta(req.body,req);
         console.log('nombreReceta', req.body.nombre);
         nuevo = await getRecetaByTitulo(req.body.nombre);
         console.log(nuevo)
