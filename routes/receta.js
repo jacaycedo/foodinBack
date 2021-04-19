@@ -25,12 +25,12 @@ router.get('/autor/:autor', async function (req, res, next){
     res.send(products);
 })
 
-router.delete('/id', async function (req, res, next){
-    let borrar = await getRecetaById((req.body.id))
-    if(!borrar){res.status(404).send("No existe una receta con ese id"); return;}
+router.delete('/:id', async function (req, res, next){
+    let borrar = await getRecetaById((req.params.id))
+    if(!borrar){res.send("No existe una receta con ese id"); return;}
     else{
         const del = await deleteRecetaById(req.params.id)
-        res.send("Eliminada la receta con id ", borrar.id)
+        res.send("Eliminada la receta con id " + borrar.nombre)
     }
 })
 
