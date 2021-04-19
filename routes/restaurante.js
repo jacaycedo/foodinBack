@@ -39,31 +39,8 @@ router.post('/recetas',async function(req,res,next){
     res.send(resultado)
 })
 
-router.post('/',multer({ dest: 'temp/', limits: { fieldSize: 8 * 1024 * 1024*1024 } }).single('imagen') ,async function (req, res, next){
-    console.log("Por si las")
-    try 
-    {
-        
-        let nuevo = await getRestauranteByNombre(req.body.nombre)
-        if (nuevo)
-        {
-            throw new Error('Ya existe un restaurantre con este nombre');
-        }
-        console.log('El nombre del archivo')
-        await insertRestaurante(req.body,req);
-        console.log('nombreRestaurante', req.body.nombre);
-        nuevo = await getRestauranteByNombre(req.body.nombre);
-        res.send(nuevo);
-    } 
-    catch (error) 
-    {
-        console.log(error)
-        res.status(500).send('Internal Server Error');
-    }
-})
 
-
-router.post('/prueba',uploader.array('images',10),async function (req, res, next){
+router.post('/',uploader.array('images',10),async function (req, res, next){
     try 
     {
 
