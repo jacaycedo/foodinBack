@@ -2,7 +2,6 @@ const {db} = require('../db/mongoConexion')
 const NOMBRE_COLLECCION = 'restaurantes'
 const  aws = require('aws-sdk')
 const  fs = require('fs')
-const checkMulterParams = require('./check-multer-params');
 
 async function insertarRestaurantePrueba(restaurante, req){
     console.log('Llegue hasta aca')

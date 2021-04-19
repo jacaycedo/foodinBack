@@ -5,7 +5,8 @@ var [getFoodies, getFoodieByUsername,insertFoodie, editarFoodie,agregarReceta,li
     insertarCategoria,listarRestaurantesFollow,listarFoodiesFollow,
     listarRestaurantesFavoritos,listarRecetasFavoritas
 ] = require('../controllers/foodie')
-
+const  multer = require('multer')
+let uploader  = multer({dest:'temp/'})
 router.get('/', async function (req, res, next){
     const products = await getFoodies();
     res.send(products);
@@ -74,22 +75,27 @@ router.post('/categorias', async function (req,res,next){
     res.send(resultado)
 })
 
-router.post('/', async function (req, res, next){
+router.post('/',uploader.single('avatar') ,async function (req, res, next){
     try 
     {
+        console.log('uwu')
         let nuevo = await getFoodieByUsername(req.body.username)
         console.log(nuevo)
+        console.log('Imprimi')
         if (nuevo)
         {
             throw new Error('Ya existe un foodie con este titulo');
+        }else{
+            console.log('voy a seguir')
         }
-        await insertFoodie(req.body);
-        console.log('nombrefoodie', req.body.nombre);
+        await insertFoodie(req.body,req);
+        console.log('nombrefoodie', req.body.name);
         nuevo = await getFoodieByUsername(req.body.username);
         res.send(nuevo);
     } 
-    catch ({error}) 
-    {
+    catch (error) 
+    {   
+        console.log(error)
         res.status(500).send('Internal Server Error');
     }
 })

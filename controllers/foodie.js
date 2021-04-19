@@ -1,5 +1,7 @@
 const {db} = require('../db/mongoConexion')
 const NOMBRE_COLLECCION = 'foodies'
+const  aws = require('aws-sdk')
+const  fs = require('fs')
 
 async function getFoodies()
 {
@@ -15,6 +17,7 @@ async function getFoodies()
 
 async function getFoodieByUsername(id)
 {
+    console.log('Busco por id')
     const restaurante = await db()
     .collection(NOMBRE_COLLECCION)
     .findOne({username:id});
@@ -23,11 +26,47 @@ async function getFoodieByUsername(id)
 }
 
 
-async function insertFoodie(foodie)
+async function insertFoodie(body,req)
 {
-    console.log('entre')
-    await db().collection(NOMBRE_COLLECCION)
-    .insertOne(foodie);
+    aws.config.setPromisesDependency()
+    aws.config.update(
+        {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            region: process.env.REGION
+        }
+    )
+    let params = {
+        ACL:'public-read',
+        Bucket:process.env.S3_BUCKET,
+        Body:fs.createReadStream(req.file.path),
+        Key: `${req.file.originalname}${req.file.filename}.${req.file.originalname.split(".")[1]}` 
+    }
+    const s3 = new aws.S3()
+    let uploader = s3.upload(params)
+    let promise = uploader.promise()
+    await promise.then( async (data,err)=>{
+        if (err){
+            console.log('ERROR LOADING THE FILE')
+        }
+        if(data){
+            console.log(data)
+            fs.unlinkSync(req.file.path)
+            const urlLocation = data.Location
+            let newFoodie = {
+                username:body.username,
+                name:body.name,
+                ciudades: body.ciudades.split(','),
+                categorias:body.categorias.split(','),
+                especialidad:body.especialidad,
+                anio:parseInt(body.anio),
+                url:urlLocation
+            }
+            await db().collection(NOMBRE_COLLECCION)
+            .insertOne(newFoodie);
+        }
+    })
+ 
     return;
 }
 
