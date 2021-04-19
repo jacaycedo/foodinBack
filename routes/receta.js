@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-var [getRecetas,getRecetaByTitulo,getRecetaById,insertReceta,editarReceta,getRecetaByAutor,deleteRecetaById] = require('../controllers/receta')
+var [getRecetas,getRecetaByTitulo,getRecetaById,insertReceta,editarReceta,getRecetaByAutor,deleteRecetaById,deleteRecetas] = require('../controllers/receta')
 
 router.get('/', async function (req, res, next){
     console.log("Todos")
@@ -32,6 +32,11 @@ router.delete('/:id', async function (req, res, next){
         const del = await deleteRecetaById(req.params.id)
         res.send("Eliminada la receta con id " + borrar.nombre)
     }
+})
+
+router.delete('/efe', async function (req, res, next){
+    let eliminar = await deleteRecetas()
+    return 'DELETE FROM Recetas ' 
 })
 
 

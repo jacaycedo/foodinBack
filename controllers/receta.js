@@ -26,6 +26,16 @@ async function deleteRecetaById(id)
 {
     const x = await db().collection(NOMBRE_COLLECCION)
     .deleteOne({_id:ObjectId(id)})
+
+    return x
+}
+
+async function deleteRecetas()
+{
+    const x = await db().collection(NOMBRE_COLLECCION)
+    .remove({})
+
+    return 'Eliminadas' 
 }
 
 async function getRecetaByTitulo(tit)
@@ -57,4 +67,4 @@ async function editarReceta(viejo, nuevo)
    return act;
 }
 
-module.exports = [getRecetas,getRecetaByTitulo,getRecetaById,insertReceta,editarReceta,getRecetaByAutor,deleteRecetaById]
+module.exports = [getRecetas,getRecetaByTitulo,getRecetaById,insertReceta,editarReceta,getRecetaByAutor,deleteRecetaById,deleteRecetas]
