@@ -44,8 +44,8 @@ async function insertarRestaurantePrueba(restaurante, req){
         })
     }
     console.log(urls)
-    restaurante.estrellas = parseInt(restaurante.estrellas)
-    restaurante.costo = parseInt(restaurante.costo)
+    restaurante.estrellas = parseFloat(restaurante.estrellas)
+    restaurante.costo = parseFloat(restaurante.costo)
     let newRestaurante = {...restaurante,url:urls}
         db().collection(NOMBRE_COLLECCION).insertOne(newRestaurante);
 }
@@ -133,30 +133,85 @@ async function listarResenias(restaurante)
     const act = await db().collection(NOMBRE_COLLECCION).find(
         {nombre:restaurante}
     )
-    .project({resenia:1,_id:0}).toArray()
+    .project({resenias:1,_id:0}).toArray()
     
     
 
     return act
 }
 
-async function agregarResenia(body)
+async function agregarResenia(body,req)
 {   
+    console.log('Llegue hasta aca')
+    console.log(req.files)
+    aws.config.setPromisesDependency()
+    aws.config.update(
+        {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            region: process.env.REGION
+        }
+    )
+
+    let urls = new Array()
+    const s3 = new aws.S3()
+
+    for (const imageMeta of req.files){
+        let params = {
+            ACL:'public-read',
+            Bucket:process.env.S3_BUCKET,
+            Body:fs.createReadStream(imageMeta.path),
+            Key: `${imageMeta.filename}${imageMeta.originalname}.${imageMeta.originalname.split('.')[1]}` 
+        }
+
+        let uploader = s3.upload(params)
+        let promise = uploader.promise()
+
+        await promise.then((data,err)=>{
+            if (err){
+                console.log('ERROR LOADING THE FILE')
+            }
+            if(data){
+                
+                fs.unlinkSync(imageMeta.path)
+                const urlLocation = data.Location
+                console.log(urlLocation)
+                urls.push(urlLocation)
+            }
+        })
+    }
+    let addreview = {
+        autor:body.autor,
+        comentario:body.comentario,
+        estrellas: parseFloat(body.estrellas)
+    }
     resultado = await db().collection(NOMBRE_COLLECCION).updateOne(
         {nombre:body.restaurante},
-        {$push:{resenia:body.resenia}}
+        {$push:{resenias:{...addreview,urls:urls}}}
         )
         const act = await listarResenias(body.restaurante)
-        let resenias = act[0].resenia
+        let resenias = act[0].resenias
+
         let numresenias =resenias.length
         const reductor = (accumulator, currentValue)=> accumulator + currentValue
-        let calificaciones = resenias.map(r =>r.calificacion).reduce(reductor)
+        let calificaciones = resenias.map(r =>r.estrellas).reduce(reductor)
         calificaciones = calificaciones/numresenias
         resultado = await db().collection(NOMBRE_COLLECCION).updateOne(
             {nombre:body.restaurante},
-            {$set:{calificacion:calificaciones}}
+            {$set:{estrellas:calificaciones}}
             )
-    return resultado
+
+        let reseniaAutor = {
+            nombreRestaurente:body.restaurante,
+            estrellas: body.estrellas,
+            comentario: body.comentario
+        }
+        let user = await db().collection("foodies").updateOne(
+            {username:body.autor},
+            {$set:{resenias:{...reseniaAutor,urls:urls}}}
+            )
+            
+    return resenias
 }
 
 async function agregarReceta(body){

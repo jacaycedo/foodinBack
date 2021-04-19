@@ -29,8 +29,8 @@ router.get('/restaurante/:nombreRestaurante', async function (req, res, next){
     res.send(products);
 })
 
-router.post('/resenia', async function (req,res,next){
-    const resultado = await agregarResenia(req.body)
+router.post('/resenia',uploader.array('images',10),async function (req,res,next){
+    const resultado = await agregarResenia(req.body, req)
     res.send(resultado)
 })
 
