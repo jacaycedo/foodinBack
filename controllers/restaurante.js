@@ -207,7 +207,7 @@ async function agregarResenia(body,req)
         }
         let user = await db().collection("foodies").updateOne(
             {username:body.autor},
-            {$set:{resenias:{...reseniaAutor,urls:urls}}}
+            {$push:{resenias:{...reseniaAutor,urls:urls}}}
             )
             
     return resenias
