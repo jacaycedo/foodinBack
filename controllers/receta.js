@@ -59,7 +59,6 @@ async function getRecetaById(id)
 async function insertReceta(receta,req)
 {
     console.log('Llegue hasta aca')
-    console.log(req.file)
     aws.config.setPromisesDependency()
     aws.config.update(
         {
