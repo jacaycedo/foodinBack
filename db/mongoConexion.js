@@ -6,7 +6,6 @@ const database = process.env.DB_NAME;
 
 
 
-
 const client = mongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

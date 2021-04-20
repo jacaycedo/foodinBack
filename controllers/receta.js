@@ -71,15 +71,15 @@ async function insertReceta(receta,req)
 
     let urls = new Array()
     const s3 = new aws.S3()
+    
 
-    for (const imageMeta of req.file){
+    let imageMeta = req.file
         let params = {
             ACL:'public-read',
             Bucket:process.env.S3_BUCKET,
             Body:fs.createReadStream(imageMeta.path),
             Key: `${imageMeta.filename}.${imageMeta.originalname.split('.')[1]}` 
         }
-
         let uploader = s3.upload(params)
         let promise = uploader.promise()
 
@@ -95,7 +95,7 @@ async function insertReceta(receta,req)
                 urls.push(urlLocation)
             }
         })
-    }
+    
 
     let newReceta = {
         ...receta,
