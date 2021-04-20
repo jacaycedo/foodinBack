@@ -55,7 +55,7 @@ async function getRecetaById(id)
     .findOne({_id:ObjectId(id)})
     return receta;
 }
-
+ 
 async function insertReceta(receta,req)
 {
     console.log('Llegue hasta aca')
