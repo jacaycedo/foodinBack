@@ -45,6 +45,7 @@ router.delete('/efe', async function (req, res, next){
 
 router.post('/',uploader.single('images'),async function (req, res, next){
     console.log('entre a agregar receta')
+    console.log(req)
     try 
     {
         let nuevo = await getRecetaByTitulo(req.body.nombre)
