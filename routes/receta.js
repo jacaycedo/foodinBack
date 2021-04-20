@@ -43,7 +43,7 @@ router.delete('/efe', async function (req, res, next){
 })
 
 
-router.post('/',uploader.array('images',10),async function (req, res, next){
+router.post('/',uploader.single('images'),async function (req, res, next){
     console.log('entre a agregar receta')
     try 
     {
