@@ -59,7 +59,7 @@ async function getRecetaById(id)
 async function insertReceta(receta,req)
 {
     console.log('Llegue hasta aca')
-    console.log(req.files)
+    console.log(req.file)
     aws.config.setPromisesDependency()
     aws.config.update(
         {
@@ -72,7 +72,7 @@ async function insertReceta(receta,req)
     let urls = new Array()
     const s3 = new aws.S3()
 
-    for (const imageMeta of req.files){
+    for (const imageMeta of req.file){
         let params = {
             ACL:'public-read',
             Bucket:process.env.S3_BUCKET,
